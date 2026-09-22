@@ -18,12 +18,12 @@ class scctcust extends Model
 
     public static function showVAMTS($nis): string
     {
-        return self::formatVA('751023', $nis);
+        return self::formatVA('752086', $nis);
     }
 
     public static function showVAMA($nis): string
     {
-        return self::formatVA('797763', $nis);
+        return self::formatVA('797785', $nis);
     }
 
     public static function showVASpp($nis): string
@@ -33,12 +33,12 @@ class scctcust extends Model
 
     public static function showVASaku($nis): string
     {
-        return self::formatVA('751024', $nis);
+        return self::formatVA('752086', $nis);
     }
 
     public static function showVA($nis): string
     {
-        return self::showVAMTS($nis);
+        return self::showVAMA($nis);
     }
 
     public static function formatVA(string $prefix, mixed $nis): string

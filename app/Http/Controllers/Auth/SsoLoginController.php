@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\CyberKey;
+use App\Support\PersistentLogin;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -64,6 +65,7 @@ class SsoLoginController extends Controller
             }
 
             Auth::guard('web')->login($user, false);
+            PersistentLogin::queue($user);
 
             return redirect('/admin');
         } catch (Throwable $e) {

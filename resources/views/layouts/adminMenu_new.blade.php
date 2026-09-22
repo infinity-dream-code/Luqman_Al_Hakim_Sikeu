@@ -3,7 +3,7 @@
         <a href="{{route('admin.index')}}" class="app-brand-link">
             <span class="app-brand-logo demo">
                 <span style="color: var(--bs-primary)">
-                    <img width="50" height="50" src="{{asset('logo.png')}}" alt="logo">
+                    <img width="50" height="50" src="{{asset('at-tibyan.jpg')}}" alt="logo">
                 </span>
             </span>
             <span class="app-brand-text demo menu-text fw-bold ms-2">SIKEU</span>

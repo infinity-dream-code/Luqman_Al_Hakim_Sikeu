@@ -2,20 +2,29 @@
 
 namespace App\Http\Middleware;
 
+use App\Support\PersistentLogin;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class CheckSession
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
-        if (!session()->has('user')) {
+        if (!Auth::check()) {
+            $user = PersistentLogin::userFromRequest($request);
+            if ($user) {
+                PersistentLogin::bind($user);
+                PersistentLogin::queue($user);
+            }
+        }
+
+        if (!Auth::check()) {
+            if ($request->expectsJson() || $request->ajax() || $request->wantsJson()) {
+                return response()->json(['retry' => true, 'token' => csrf_token()], 401);
+            }
+
             return redirect()->route('login');
         }
 

@@ -6,7 +6,7 @@
         <div class="authentication-inner row m-0">
             <div class="d-none d-lg-flex col-lg-7 col-xl-8 align-items-center justify-content-center p-12 pb-2">
                 <div>
-                    <img src="{{ asset('logo.png') }}" alt="logo" style="width: 120px; height: 120px;" class="mb-5">
+                    <img src="{{ asset('at-tibyan.jpg') }}" alt="logo" style="width: 120px; height: 120px;" class="mb-5">
                     <h3 class="mb-2">Approval Prestasi</h3>
                     <p class="text-muted">Login admin untuk approve/tolak prestasi siswa.</p>
                 </div>

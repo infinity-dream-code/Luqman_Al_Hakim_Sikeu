@@ -680,11 +680,13 @@
             const userName = "{{ Auth::user()->name }}";
             const domisili = "{{ config('app.domisili') }}";
             const tanggalSekarang = "{{ \Carbon\Carbon::now()->isoFormat('dddd, D MMMM YYYY') }}";
-            const APP_NOVA = {{ (int) config('app.nova', 751023) }};
+            const APP_NOVA = {{ (int) config('app.nova', 797785) }};
             const showVA = (nis, unit) => {
                 if (!nis) return '';
                 const code = String(unit ?? '').trim().toLowerCase();
-                const prefix = (code === '63' || code.includes('ma')) ? '797763' : String(APP_NOVA).substring(0, 6);
+                const prefix = (code === '63' || code.includes('ma') || code.includes('daftar'))
+                    ? '797785'
+                    : '752086';
                 return prefix + String(nis).padStart(10, '0');
             };
             const modalEditNova = new bootstrap.Modal(document.getElementById('modal-edit-nova'));

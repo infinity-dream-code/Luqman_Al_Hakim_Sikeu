@@ -17,12 +17,12 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
-    'nama_instansi' => env('APP_NAMA_INSTANSI', 'YAYASAN PENDIDIKAN ISLAM SABILUL'),
-    'alamat' => env('APP_ALAMAT', 'SIKEU'),
-    'email' => env('APP_EMAIL', 'ypisabkho@gmail.com'),
-    'telepon' => env('APP_TELEPON', 'SIKEU'),
-    'domisili' => env('APP_DOMISILI', 'SALATIGA'),
-    'nova' => env('APP_NOVA', 123456),
+    'nama_instansi' => env('APP_NAMA_INSTANSI', 'Ponpes At Tibyan'),
+    'alamat' => env('APP_ALAMAT', 'Kab. Deli Serdang, Prov. Sumatera Utara'),
+    'email' => env('APP_EMAIL', ''),
+    'telepon' => env('APP_TELEPON', ''),
+    'domisili' => env('APP_DOMISILI', 'DELI SERDANG'),
+    'nova' => env('APP_NOVA', 797785),
     'biaya_admin' => env('BIAYA_ADMIN', 0),
     'dummy_seeder' => env('DUMMY_SEEDER',false),
     'demo_mode' => env('DEMO_MODE',false),
