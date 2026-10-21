@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use App\Support\PersistentLogin;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class RestorePersistentLogin
@@ -13,11 +12,7 @@ class RestorePersistentLogin
     public function handle(Request $request, Closure $next): Response
     {
         if (!$request->routeIs('logout')) {
-            $user = Auth::user() ?: PersistentLogin::userFromRequest($request);
-            if ($user) {
-                PersistentLogin::bind($user);
-                PersistentLogin::queue($user);
-            }
+            PersistentLogin::rehydrate($request);
         }
 
         /** @var Response $response */

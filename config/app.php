@@ -16,13 +16,14 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
-    'nama_instansi' => env('APP_NAMA_INSTANSI', 'Ponpes At Tibyan'),
-    'alamat' => env('APP_ALAMAT', 'Kab. Deli Serdang, Prov. Sumatera Utara'),
+    'name' => env('APP_NAME', 'Luqman Al Hakim'),
+    'nama_instansi' => env('APP_NAMA_INSTANSI', 'Luqman Al Hakim'),
+    'alamat' => env('APP_ALAMAT', 'Kota Surabaya, Prov. Jawa Timur'),
     'email' => env('APP_EMAIL', ''),
     'telepon' => env('APP_TELEPON', ''),
-    'domisili' => env('APP_DOMISILI', 'DELI SERDANG'),
-    'nova' => env('APP_NOVA', 797785),
+    'domisili' => env('APP_DOMISILI', 'SURABAYA'),
+    'nova' => env('APP_NOVA', 751011),
+    'nova_psb' => env('APP_NOVA_PSB', 751033),
     'biaya_admin' => env('BIAYA_ADMIN', 0),
     'dummy_seeder' => env('DUMMY_SEEDER',false),
     'demo_mode' => env('DEMO_MODE',false),

@@ -7,14 +7,16 @@
 @section('script')
     <script>
         (function () {
-            const key = 'at_tibyan_419_reloaded';
+            const key = 'al_hakim_419_reloaded';
             if (!sessionStorage.getItem(key)) {
                 sessionStorage.setItem(key, '1');
                 window.location.reload();
                 return;
             }
             sessionStorage.removeItem(key);
-            window.location.href = {{ Illuminate\Support\Js::from(url('/admin')) }};
+            const url = new URL(window.location.href);
+            url.searchParams.set('_r', String(Date.now()));
+            window.location.replace(url.toString());
         })();
     </script>
 @endsection

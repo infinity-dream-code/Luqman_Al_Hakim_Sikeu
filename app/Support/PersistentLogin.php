@@ -11,7 +11,7 @@ use Throwable;
 
 class PersistentLogin
 {
-    public const COOKIE = 'at-tibyan';
+    public const COOKIE = 'al_hakim_keu';
 
     public static function lifetimeMinutes(): int
     {
@@ -32,6 +32,45 @@ class PersistentLogin
         }
 
         $guard->setUser($user);
+    }
+
+    /**
+     * Restore auth from cookie and ensure a usable session exists.
+     * Does not log the user out when the session file/store is unreadable.
+     */
+    public static function rehydrate(Request $request): ?CyberKey
+    {
+        $user = Auth::user() ?: self::userFromRequest($request);
+        if (!$user) {
+            return null;
+        }
+
+        try {
+            if ($request->hasSession()) {
+                if (!$request->session()->isStarted()) {
+                    $request->session()->start();
+                }
+
+                if (!Auth::check()) {
+                    $request->session()->regenerate(true);
+                    Auth::login($user, false);
+                } else {
+                    self::bind($user);
+                }
+            } else {
+                self::bind($user);
+            }
+        } catch (Throwable $e) {
+            try {
+                Auth::login($user, false);
+            } catch (Throwable $ignored) {
+                self::bind($user);
+            }
+        }
+
+        self::queue($user);
+
+        return $user;
     }
 
     public static function queue(?CyberKey $user): void

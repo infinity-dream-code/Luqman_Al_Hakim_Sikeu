@@ -22,7 +22,7 @@
                         <a href="{{route('index')}}" class="app-brand-link gap-2">
                             <span class="app-brand-logo demo">
                                 <span style="color: #666cff">
-                                        <img width="100" height="100" src="{{asset('at-tibyan.jpg')}}" alt="logo">
+                                        <img width="100" height="100" src="{{asset('hakim.jpeg')}}" alt="logo">
                                 </span>
                             </span>
                         </a>

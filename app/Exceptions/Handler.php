@@ -7,7 +7,6 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
@@ -37,50 +36,17 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $e)
     {
         if ($e instanceof TokenMismatchException) {
-            $user = Auth::user() ?: PersistentLogin::userFromRequest($request);
-            if ($user) {
-                PersistentLogin::bind($user);
-                PersistentLogin::queue($user);
-            }
+            return $this->recoverAuthenticatedRequest($request, 419);
+        }
 
-            if ($request->hasSession()) {
-                $request->session()->regenerateToken();
-            }
-
-            if ($this->isAjaxRequest($request)) {
-                return response()->json([
-                    'ok' => true,
-                    'retry' => true,
-                    'token' => csrf_token(),
-                ], 419);
-            }
-
-            if ($request->isMethod('GET')) {
-                return redirect()->to($request->fullUrl());
-            }
-
-            return redirect()->back();
+        if ($this->isSessionReadFailure($e)) {
+            return $this->recoverAuthenticatedRequest($request, 500);
         }
 
         if ($e instanceof AuthenticationException) {
-            $user = Auth::user() ?: PersistentLogin::userFromRequest($request);
+            $user = PersistentLogin::rehydrate($request);
             if ($user) {
-                PersistentLogin::bind($user);
-                PersistentLogin::queue($user);
-
-                if ($this->isAjaxRequest($request)) {
-                    return response()->json([
-                        'ok' => true,
-                        'retry' => true,
-                        'token' => csrf_token(),
-                    ], 401);
-                }
-
-                if ($request->isMethod('GET')) {
-                    return redirect()->to($request->fullUrl());
-                }
-
-                return redirect()->back();
+                return $this->redirectToCurrentOrBack($request, 401);
             }
 
             if ($this->isAjaxRequest($request)) {
@@ -105,6 +71,38 @@ class Handler extends ExceptionHandler
         return parent::render($request, $e);
     }
 
+    private function recoverAuthenticatedRequest(Request $request, int $status)
+    {
+        PersistentLogin::rehydrate($request);
+
+        if ($request->hasSession()) {
+            try {
+                $request->session()->regenerateToken();
+            } catch (Throwable $ignored) {
+                //
+            }
+        }
+
+        return $this->redirectToCurrentOrBack($request, $status);
+    }
+
+    private function redirectToCurrentOrBack(Request $request, int $status)
+    {
+        if ($this->isAjaxRequest($request)) {
+            return response()->json([
+                'ok' => true,
+                'retry' => true,
+                'token' => csrf_token(),
+            ], $status);
+        }
+
+        if ($request->isMethod('GET')) {
+            return redirect()->to($request->fullUrl());
+        }
+
+        return redirect()->back();
+    }
+
     private function isAjaxRequest(Request $request): bool
     {
         return $request->expectsJson()
@@ -112,6 +110,23 @@ class Handler extends ExceptionHandler
             || $request->wantsJson()
             || $request->header('X-Requested-With') === 'XMLHttpRequest'
             || str_contains((string) $request->header('Accept'), 'application/json');
+    }
+
+    private function isSessionReadFailure(Throwable $e): bool
+    {
+        $message = strtolower($e->getMessage() . ' ' . $e->getPrevious()?->getMessage());
+
+        return str_contains($message, 'failed to start the session')
+            || str_contains($message, 'session store not set on request')
+            || str_contains($message, 'unable to create current session')
+            || str_contains($message, 'session data is corrupted')
+            || (str_contains($message, 'unserialize') && str_contains($message, 'session'))
+            || (str_contains($message, 'session') && (
+                str_contains($message, 'not readable')
+                || str_contains($message, 'no such file')
+                || str_contains($message, 'failed to open')
+                || str_contains($message, 'permission denied')
+            ));
     }
 
     private function isTransientServerError(Throwable $e): bool

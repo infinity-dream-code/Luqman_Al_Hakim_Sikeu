@@ -13,11 +13,7 @@ class CheckSession
     public function handle(Request $request, Closure $next): Response
     {
         if (!Auth::check()) {
-            $user = PersistentLogin::userFromRequest($request);
-            if ($user) {
-                PersistentLogin::bind($user);
-                PersistentLogin::queue($user);
-            }
+            PersistentLogin::rehydrate($request);
         }
 
         if (!Auth::check()) {

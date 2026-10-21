@@ -18,22 +18,28 @@ class scctcust extends Model
 
     public static function showVAMTS($nis): string
     {
-        return self::formatVA('752086', $nis);
+        return self::formatVA((string) config('app.nova', 751011), $nis);
     }
 
     public static function showVAMA($nis): string
     {
-        return self::formatVA('797785', $nis);
+        return self::formatVA((string) config('app.nova', 751011), $nis);
+    }
+
+    /** VA khusus PSB STAI (751033). */
+    public static function showVAPSB($nis): string
+    {
+        return self::formatVA((string) config('app.nova_psb', 751033), $nis);
     }
 
     public static function showVASpp($nis): string
     {
-        return self::showVAMTS($nis);
+        return self::showVA($nis);
     }
 
     public static function showVASaku($nis): string
     {
-        return self::formatVA('752086', $nis);
+        return self::showVA($nis);
     }
 
     public static function showVA($nis): string

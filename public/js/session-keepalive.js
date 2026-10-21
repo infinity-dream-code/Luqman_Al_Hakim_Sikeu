@@ -148,6 +148,17 @@
         return typeof url === 'string' && url.indexOf('/keep-alive') !== -1;
     }
 
+    function softReloadOnce() {
+        const key = 'al_hakim_soft_reload';
+        if (sessionStorage.getItem(key)) {
+            sessionStorage.removeItem(key);
+            return false;
+        }
+        sessionStorage.setItem(key, '1');
+        window.location.reload();
+        return true;
+    }
+
     window.fetch = function (input, init) {
         if (isKeepAliveUrl(input)) {
             return nativeFetch(input, init);
@@ -164,7 +175,12 @@
 
             return keepAlive().then(function (token) {
                 const secondInput = canClone ? input.clone() : input;
-                return nativeFetch(secondInput, retryInit(input, init, token || currentToken()));
+                return nativeFetch(secondInput, retryInit(input, init, token || currentToken())).then(function (retryRes) {
+                    if (shouldRetryStatus(retryRes.status)) {
+                        softReloadOnce();
+                    }
+                    return retryRes;
+                });
             });
         });
     };
@@ -237,6 +253,9 @@
                     originalAjax(retrySettings).done(function () {
                         succeed(this, arguments);
                     }).fail(function () {
+                        if (softReloadOnce()) {
+                            return;
+                        }
                         fail(this, arguments);
                     });
                 }.bind(ctx));

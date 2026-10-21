@@ -7,7 +7,7 @@
 @section('script')
     <script>
         (function () {
-            const key = 'at_tibyan_500_reloaded';
+            const key = 'al_hakim_500_reloaded';
             if (!sessionStorage.getItem(key)) {
                 sessionStorage.setItem(key, '1');
                 window.location.reload();
