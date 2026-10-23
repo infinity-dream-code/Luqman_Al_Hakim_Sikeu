@@ -245,40 +245,7 @@
             </ul>
         </li>
 
-    
-
-        <li class="menu-item {{ Request::is(['admin/pengumuman*']) ? 'active' : '' }}">
-            <a href="{{ url('admin/pengumuman') }}" class="menu-link">
-                <i class="menu-icon ri ri-megaphone-line"></i>
-                <div data-i18n="Pengumuman">Pengumuman</div>
-            </a>
-        </li>
-
-        <li class="menu-item {{ Request::is(['admin/wakaf*']) ? 'active open' : '' }}">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon ri ri-hand-heart-line"></i>
-                <div data-i18n="Wakaf">Infaq</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item {{ Request::is(['admin/wakaf/master-wakaf*']) ? 'active' : '' }}">
-                    <a href="{{ route('admin.wakaf.master-wakaf.index') }}" class="menu-link">
-                        <div data-i18n="Master Wakaf">Master Infaq</div>
-                    </a>
-                </li>
-                <li class="menu-item {{ Request::is(['admin/wakaf/rekap-wakaf*']) ? 'active' : '' }}">
-                    <a href="{{ route('admin.wakaf.rekap-wakaf.index') }}" class="menu-link">
-                        <div data-i18n="Rekap Wakaf">Rekap Infaq</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-        <li class="menu-item {{ Request::is(['admin/update-musrifah*']) ? 'active' : '' }}">
-            <a href="{{ route('admin.update-musrifah.index') }}" class="menu-link">
-                <i class="menu-icon ri ri-user-settings-line"></i>
-                <div data-i18n="Update Musrifah">Update Musrifah</div>
-            </a>
-        </li>
+        {{-- Hidden for Luqman Al Hakim: Pengumuman, Infaq, Update Musrifah --}}
 
         <li class="menu-item mt-auto pb-2">
             <a href="{{route('logout')}}" class="menu-link btn-danger text-white" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
